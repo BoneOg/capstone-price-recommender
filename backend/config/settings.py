@@ -48,12 +48,6 @@ INSTALLED_APPS = [
 
     # Custom apps
     'apps.accounts',
-    'apps.dashboard',
-    'apps.inventory',
-    'apps.menu',
-    'apps.costing',
-    'apps.analysis',
-    'apps.ocr',
 ]
 
 MIDDLEWARE = [
