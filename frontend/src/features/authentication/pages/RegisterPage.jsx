@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../hooks/useAuth'
 import InputField from '../components/InputField'
 import PasswordField from '../components/PasswordField'
 import OAuthButton from '../components/OAuthButton'
 
 export default function RegisterPage() {
   const navigate = useNavigate()
+  const { register } = useAuth()
   const [form, setForm] = useState({
     first_name: '',
     last_name: '',
@@ -18,13 +20,21 @@ export default function RegisterPage() {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (form.password !== form.confirm_password) {
       alert('Passwords do not match!')
       return
     }
-    console.log('Register submitted:', form)
+    
+    try {
+      await register(form)
+      alert("Registration successful! You can now log in.")
+      navigate('/login')
+    } catch (err) {
+      alert(err.response?.data?.email?.[0] || 'Registration failed. Please check your details.')
+      console.error(err)
+    }
   }
 
   return (

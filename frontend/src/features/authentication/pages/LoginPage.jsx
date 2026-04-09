@@ -1,20 +1,28 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../hooks/useAuth'
 import InputField from '../components/InputField'
 import PasswordField from '../components/PasswordField'
 import OAuthButton from '../components/OAuthButton'
 
 export default function LoginPage() {
   const navigate = useNavigate()
+  const { login } = useAuth()
   const [form, setForm] = useState({ email: '', password: '' })
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Login submitted:', form)
+    try {
+      await login(form)
+      navigate('/dashboard')
+    } catch (err) {
+      alert('Invalid credentials')
+      console.error(err)
+    }
   }
 
   return (
